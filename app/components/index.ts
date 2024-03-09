@@ -1,1 +1,5 @@
 export { default as Login } from "./Login"
+export { default as Speaker } from "./Speaker"
+export { default as Viewer } from "./Viewer"
+export { default as Participant } from "./Participant"
+export { default as Controls } from "./Controls"
