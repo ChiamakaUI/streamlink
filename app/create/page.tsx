@@ -29,7 +29,9 @@ const Main = () => {
 
     const signedInUser = await register(newUser);
     console.log(signedInUser);
-    // const meetingId = await createMeeting()
+    const meetingId = await createMeeting(signedInUser.token)
+    console.log(meetingId)
+    router.push(`room/${meetingId}?mode=CONFERENCE`)
   };
 
   return (

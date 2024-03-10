@@ -13,8 +13,7 @@ type UserProps = {
 export const register = async (values) => {
   const { name, email, wallet, image } = values;
   const user = await db.user.findUnique({ where: { email } });
-  const token = createToken();
-  console.log(token)
+  const token = await createToken();
 
   if (user) {
     return { ...user, token };
@@ -26,7 +25,6 @@ export const register = async (values) => {
       email,
       image,
       walletAddress: wallet,
-      //   userToken: token,
     },
   });
 
