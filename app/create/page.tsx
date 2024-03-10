@@ -1,49 +1,55 @@
 "use client";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-const schema = yup.object({
-  streamName: yup.string().required("Please, name your stream"),
-});
-
-type FormData = {
-  streamName: string;
-};
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { Login } from "../components";
+import { register } from "@/actions/auth";
+import { createMeeting } from "@/actions/livestream";
 
 const Main = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
+  const { user } = useDynamicContext();
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const onSubmit = (data: FormData) => {
-    sessionStorage.setItem("callId", data.streamName);
-    router.push(`/room/${data.streamName}`);
+  const startStream = async () => {
+    if (!user) {
+      setIsLoggedIn(true);
+      return;
+    }
+
+    const { email, firstName, lastName, verifiedCredentials } = user;
+
+    const newUser = {
+      name: `${firstName} ${lastName}`,
+      email: email,
+      wallet: verifiedCredentials[0].address,
+    };
+
+    if (newUser.email === undefined || newUser.wallet === undefined) return;
+
+    const signedInUser = await register(newUser);
+    console.log(signedInUser);
+    // const meetingId = await createMeeting()
   };
+
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full">
-          <label className="text-lg">Name your live stream:</label> <br />
-          <input
-            type="text"
-            className="border w-[55%] p-2 focus:outline-none my-1.5 rounded-md"
-            {...register("streamName")}
-          />
-          <p className="text-red-500">{errors.streamName?.message}</p>
+    <>
+      <div className="flex flex-col items-center">
+        <p className="text-3xl my-5">Welcome To StreamLink </p>
+        <div className="flex flex-col items-center">
+          <p className="text-xl mb-5">
+            Click Button below to start an instant livestream
+          </p>
+          <button
+            className="drop-shadow-md border px-3 py-1.5 text-xl"
+            onClick={startStream}
+          >
+            Stream now
+          </button>
         </div>
-        <button className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md">
-          Continue
-        </button>
-      </form>
-    </div>
+      </div>
+      {isLoggedIn && <Login />}
+    </>
   );
 };
 

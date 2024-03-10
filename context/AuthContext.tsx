@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
