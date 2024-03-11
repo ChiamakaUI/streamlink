@@ -34,11 +34,11 @@ const Container = ({ mode }: ContainerProps) => {
   return (
     <div className="">
 
-      {/* {mode === Constants.modes.CONFERENCE ? (
+      {mode === Constants.modes.CONFERENCE ? (
         <Speaker />
       ) : (
         <Viewer />
-      )} */}
+      )}
     </div>
   );
 };
