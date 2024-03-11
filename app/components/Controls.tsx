@@ -1,68 +1,78 @@
-"use client";
+"use client"
 
-import {
-  MeetingProvider,
-  useMeeting,
-  useParticipant,
-  Constants,
-} from "@videosdk.live/react-sdk";
+import { useMeeting } from "@videosdk.live/react-sdk";
 
 const Controls = () => {
-  const { hlsState, startHls, stopHls } = useMeeting();
-  const _handleHLS = () => {
-    console.log("hlsState", hlsState);
-    if (!hlsState || hlsState === "HLS_STOPPED") {
-      startHls({
-        layout: {
-          type: "SPOTLIGHT",
-          priority: "PIN",
-          gridSize: 4,
-        },
-        theme: "DARK",
-        orientation: "landscape",
-        mode:"video-and-audio",
-        quality: "high"
-      });
-    } else if (hlsState === "HLS_STARTED" || hlsState === "HLS_PLAYABLE") {
-      stopHls();
-    }
-  };
+    const { leave, toggleMic, toggleWebcam, startHls, stopHls, hlsState } =
+    useMeeting();
+//   const [hlsThumbnailImage, setHlsThumbnailImage] = useState(null);
+
   return (
     <>
-      {hlsState === "HLS_STARTED" ||
-      hlsState === "HLS_STOPPING" ||
-      hlsState === "HLS_STARTING" ||
-      hlsState === "HLS_PLAYABLE" ? (
+      <div>
+        <button onClick={() => leave()}>Leave</button>
+        &emsp;|&emsp;
+        <button onClick={() => toggleMic()}>toggleMic</button>
+        <button onClick={() => toggleWebcam()}>toggleWebcam</button>
+        &emsp;|&emsp;
         <button
           onClick={() => {
-            _handleHLS();
-          }}
-          style={{
-            backgroundColor: "#FF5D5D",
+            startHls({
+              layout: {
+                type: "SPOTLIGHT",
+                priority: "PIN",
+                gridSize: 20,
+              },
+              theme: "DARK",
+              mode: "video-and-audio",
+              quality: "high",
+              orientation: "landscape",
+            });
           }}
         >
-          {hlsState === "HLS_STARTED"
-            ? "Live Starting"
-            : hlsState === "HLS_STOPPING"
-            ? "Live Stopping"
-            : hlsState === "HLS_PLAYABLE"
-            ? "Stop Live"
-            : "Loading..."}
+          Start HLS
         </button>
+        <button onClick={() => stopHls()}>Stop HLS</button>
+        {(hlsState === "HLS_STARTED" || hlsState === "HLS_PLAYABLE") && (
+          <>
+            &emsp;|&emsp;
+            {/* <button
+              onClick={async () => {
+                const { filePath, message } = await captureHLSThumbnail({
+                  roomId: props.meetingId,
+                });
+
+                setHlsThumbnailImage({
+                  imageLink: filePath,
+                  message: message,
+                });
+              }}
+            >
+              Capture HLS Thumbnail
+            </button> */}
+          </>
+        )}
+      </div>
+      {/* {hlsThumbnailImage && hlsThumbnailImage?.imageLink ? (
+        <>
+          <p>Captured HLS Thumbnail</p>
+          <img
+            src={hlsThumbnailImage?.imageLink}
+            alt={"capture_image"}
+            height={200}
+            width={300}
+          />
+        </>
       ) : (
-        <button
-          onClick={() => {
-            _handleHLS();
-          }}
-          style={{
-            backgroundColor: "#FF5D5D",
-          }}
-        >
-          Go Live
-        </button>
-      )}
+        hlsThumbnailImage && (
+          <>
+            <p>Error In Capture HLS Thumbnail</p>
+            <p>{hlsThumbnailImage?.message}</p>
+          </>
+        )
+      )} */}
     </>
   );
-};
+}
 
-export default Controls;
+export default Controls

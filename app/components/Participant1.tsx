@@ -1,18 +1,25 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParticipant } from "@videosdk.live/react-sdk";
+import {
+  MeetingProvider,
+  useMeeting,
+  useParticipant,
+  Constants,
+} from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
 
-type ParticipantProps = {
-  participantId: string;
-};
 
-const Participant = ({ participantId }: ParticipantProps) => {
+interface ParticipantProps {
+  participantId: string;
+}
+
+
+const Participant = (props: ParticipantProps) => {
   const micRef = useRef<HTMLAudioElement>(null);
 
   const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
-    useParticipant(participantId);
+    useParticipant(props.participantId);
 
   const videoStream = useMemo(() => {
     if (webcamOn && webcamStream) {
@@ -27,7 +34,6 @@ const Participant = ({ participantId }: ParticipantProps) => {
       if (micOn && micStream) {
         const mediaStream = new MediaStream();
         mediaStream.addTrack(micStream.track);
-
         micRef.current.srcObject = mediaStream;
         micRef.current
           .play()
@@ -41,25 +47,18 @@ const Participant = ({ participantId }: ParticipantProps) => {
   }, [micStream, micOn]);
 
   return (
-    <div key={participantId}>
-      <p>
-        Participant: {displayName} | Webcam: {webcamOn ? "ON" : "OFF"} | Mic:{" "}
-        {micOn ? "ON" : "OFF"}
-      </p>
-      <audio ref={micRef} autoPlay muted={isLocal} />
+    <div>
+      <audio ref={micRef} autoPlay playsInline muted={isLocal} />
       {webcamOn && (
         <ReactPlayer
-          //
           playsinline // very very imp prop
           pip={false}
           light={false}
           controls={false}
           muted={true}
           playing={true}
-          //
           url={videoStream}
-          //
-          height={"200px"}
+          height={"300px"}
           width={"300px"}
           onError={(err) => {
             console.log(err, "participant video error");

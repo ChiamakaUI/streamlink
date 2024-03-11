@@ -1,35 +1,14 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-    MeetingProvider,
-    useMeeting,
-    useParticipant,
-    Constants,
-  } from "@videosdk.live/react-sdk";
-import Controls from "./Controls"
-import Participant from "./Participant"
+import { useMemo } from "react";
+import { useMeeting, Constants } from "@videosdk.live/react-sdk";
+import Controls from "./Controls";
+import Participant from "./Participant";
+
 
 const Speaker = () => {
-    const [joined, setJoined] = useState<string | undefined>();
-    const { participants } = useMeeting();
-    const mMeeting = useMeeting({
-      onMeetingJoined: () => {
-        setJoined("JOINED");
-
-        if (mMeetingRef.current.localParticipant.mode == "CONFERENCE") {
-          mMeetingRef.current.localParticipant.pin("CAM");
-        }
-      },
-  });
-
-  const mMeetingRef = useRef(mMeeting);
-  
-  useEffect(() => {
-    mMeetingRef.current = mMeeting;
-  }, [mMeeting]);
-
-
+  const { participants } = useMeeting();
+  console.log(participants)
   const speakers = useMemo(() => {
     const speakerParticipants = [...participants.values()].filter(
       (participant) => {
@@ -38,23 +17,19 @@ const Speaker = () => {
     );
     return speakerParticipants;
   }, [participants]);
-  return (
-    <div className="container">
-      {joined && joined == "JOINED" ? (
-        <div>
-          {speakers.map((participant) => (
-            <Participant
-              participantId={participant.id}
-              key={participant.id}
-            />
-          ))}
-          <Controls />
-        </div>
-      ) : (
-        <p>Joining the meeting...</p>
-      )}
-    </div>
-  );
-}
 
-export default Speaker
+  return (
+    <div>
+      {/* <p>Current HLS State: {hlsState}</p> */}
+      <div>
+        <button>Add products</button>
+      </div>
+      <Controls />
+      {speakers.map((participant) => (
+        <Participant participantId={participant.id} key={participant.id} />
+      ))}
+    </div>
+    )
+};
+
+export default Speaker;

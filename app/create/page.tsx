@@ -30,6 +30,7 @@ const Main = () => {
     const signedInUser = await register(newUser);
     console.log(signedInUser);
     const meetingId = await createMeeting(signedInUser.token)
+    localStorage.setItem("user", JSON.stringify(signedInUser))
     console.log(meetingId)
     router.push(`room/${meetingId}?mode=CONFERENCE`)
   };
