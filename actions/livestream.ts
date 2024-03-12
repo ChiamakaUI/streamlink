@@ -43,6 +43,8 @@ export const createMeeting = async (token: string) => {
   return roomId;
 };
 
+// API call to add meeting to db
+
 export const addMeeting = async (values: Meeting) => {
   const res = await db.liveStream.create({
     data: values,

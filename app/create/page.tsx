@@ -5,6 +5,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { Login } from "../components";
 import { register } from "@/actions/auth";
 import { createMeeting, addMeeting } from "@/actions/livestream";
+import { startAuction } from "@/actions/auction";
 
 const Main = () => {
   const { user } = useDynamicContext();
@@ -37,6 +38,11 @@ const Main = () => {
     router.push(`room/${meetingId}?mode=CONFERENCE`);
   };
 
+  const start = () => {
+    console.log("hello start")
+    startAuction("tyyttyy")
+  }
+
   return (
     <>
       <div className="flex flex-col items-center">
@@ -52,6 +58,7 @@ const Main = () => {
             Stream now
           </button>
         </div>
+        <button onClick={start} className="border bg-red-600 mt-8">start stream</button>
       </div>
       {isLoggedIn && <Login />}
     </>

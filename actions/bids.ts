@@ -7,8 +7,19 @@ export const getBids = async (id: string) => {
     where: {
       productId: id,
     },
+    include: {
+      user: true,
+    }
   });
   console.log(res);
 
   return res;
+};
+
+export const getAuctionBids = async (id: string) => {
+  const bids = await getBids(id)
+
+  bids.sort((a, b) => b.price - a.price); 
+  console.log(bids)
+    // return bids[0];
 };

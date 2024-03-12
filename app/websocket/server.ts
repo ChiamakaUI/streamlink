@@ -18,8 +18,6 @@ module.exports = (server, db) => {
     console.log("a user connected", socket.id);
 
     socket.on("bids", async (args) => {
-      // console.log("bids", args);
-    //   startCron()
       const bid = await db.bid.create({
         data: {
           userId: args.userId,
@@ -28,14 +26,9 @@ module.exports = (server, db) => {
         }
       });
 
-      // check if other bids have been made for this 
-      console.log(bid);
-      const multipleBids = await db.bid.findMany();
-      // console.log({multipleBids})
-      io.emit("bids", multipleBids);
+      io.emit("bids", bid); 
     });
 
-    socket.emit("allbids", "world")
   });
 
   return io;
