@@ -11,11 +11,24 @@ import {
 } from "@videosdk.live/react-sdk";
 import Hls from "hls.js";
 
-import { captureHLSThumbnail, createMeeting } from "@/actions/livestream";
+import { createMeeting } from "@/actions/livestream";
 import ReactPlayer from "react-player";
 
 const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI4NTNiYjc3Yi0zZjE0LTRlODItYWU2OS0zNTcwN2JhYmU1NTIiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxMDAyMjkwOSwiZXhwIjoxNzEwNjI3NzA5fQ.-XrO0TTWfw6WApoN7VhDSkk4OoOy_MU2Wi1LTONEOpA";
 
+const captureHLSThumbnail = async ({ roomId }) => {
+  const res = await fetch(`https://api.videosdk.live/v2/hls/capture`, {
+    method: "POST",
+    headers: {
+      authorization: `${authToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ roomId: roomId }),
+  });
+
+  const data = await res.json();
+  return data;
+};
 
 function JoinScreen({ getMeetingAndToken, setMode }) {
   const [meetingId, setMeetingId] = useState(null);

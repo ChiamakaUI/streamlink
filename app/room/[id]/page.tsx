@@ -12,8 +12,6 @@ const Main = ({ params }: { params: { id: string } }) => {
 
   const mode = searchParams.get("mode") as ModeProps;
 
-  // {params.id}
-
   return (
     currentUser &&
     mode && (

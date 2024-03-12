@@ -11,21 +11,21 @@ import axios from "axios";
 import Modal from "./Modal";
 
 type ProductModalProps = {
-    setShowModal: Function;
-}
+  setShowModal: Function;
+};
 
 type FormData = {
-    name: string;
-    description: string;
-    price: string;
-  };
+  name: string;
+  description: string;
+  price: string;
+};
 
 type Product = {
-    name: string;
-    description: string;
-    price: string;
-    image: string;
-}
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+};
 
 const schema = yup.object({
   name: yup.string().required("Please, provide product name"),
@@ -43,7 +43,8 @@ const ProductModal = ({ setShowModal }: ProductModalProps) => {
   });
 
   const [file, setFile] = useState(null);
-  const [products, setProducts] = useState<Product[]>();
+  const [stage, setStage] = useState(1);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -59,101 +60,129 @@ const ProductModal = ({ setShowModal }: ProductModalProps) => {
   const handleChange = (e) => {
     console.log(e.target.files);
     // setFile(URL.createObjectURL(e.target.files[0]));
-    uploadImage(e.target.files[0])
+    uploadImage(e.target.files[0]);
   };
 
   const uploadImage = async (file) => {
     // const preset_key = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_KEY
     // const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-    const preset_key = "yberuuyv"
-    const cloudName = "adaeze"
+    const preset_key = "yberuuyv";
+    const cloudName = "adaeze";
 
     const image = file;
-    
-    try{
-        if (image && preset_key && cloudName) {
-            const formData = new FormData();
-            formData.append("file", image)
-            formData.append("upload_preset", preset_key)
-            
-         await axios.post(
-                `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, 
-                formData
-            )
-            .then(res => {
-                console.log("Image: ",res.data.url);
-                setFile(res?.data?.secure_url)
-            })
-            .catch(err => console.log(err))   
-    
-        };
-    } catch(error){
-        console.log(error)            
-    }        
-}
 
+    try {
+      if (image && preset_key && cloudName) {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", preset_key);
+
+        await axios
+          .post(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            formData
+          )
+          .then((res) => {
+            console.log("Image: ", res.data.url);
+            setFile(res?.data?.secure_url);
+          })
+          .catch((err) => console.log(err));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(products);
+  const uploadProduct = () => {
+    setStage(2);
+    if (stage === 2 || products?.length === 0) {
+      toast.error("Please add products to continue");
+      return;
+    }
+    setStage(3);
+  };
   return (
     <>
       <Modal bgColor={"bg-modal-black"}>
-        <div className="bg-white w-[35%] mx-auto my-8 p-5 rounded-lg">
+        <div className="bg-white w-[35%] h-full mr-auto p-5 text-black">
           <div
             className="bg-red-600 rounded-full ml-auto w-[25px] h-[25px] p-1.5 flex flex-col items-center"
             onClick={() => setShowModal(false)}
           >
             <IoMdClose className="text-white text-base cursor-pointer" />
           </div>
+          <p className="text-red-600 text-xl">{stage}</p>
+          {stage === 1 ? (
+            <div>
+              <p>start there</p>
+            </div>
+          ) : stage === 2 ? (
+            <div>
+              <label>
+                <input type="file" onChange={handleChange} className="hidden" />
+                {file ? (
+                  <div className="w-[120px] rounded-lg">
+                    <img
+                      src={file}
+                      alt=""
+                      className="w-full object-contain rounded-lg"
+                    />
+                  </div>
+                ) : (
+                  <div className="border bg-[#DCDCDC] h-[60px] w-[85px] rounded-lg flex flex-col items-center">
+                    <IoCameraOutline className="text-5xl my-auto" />
+                  </div>
+                )}
+              </label>
 
-          <label>
-            <input type="file" onChange={handleChange} className="hidden" />
-            {file ? (
-              <div className="w-[120px] rounded-lg">
-                <img
-                  src={file}
-                  alt=""
-                  className="w-full object-contain rounded-lg"
-                />
-              </div>
-            ) : (
-              <div className="border bg-[#DCDCDC] h-[60px] w-[85px] rounded-lg flex flex-col items-center">
-                <IoCameraOutline className="text-5xl my-auto" />
-              </div>
-            )}
-          </label>
-
-          <form className="my-6 w-full" onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full">
-              <label className="text-lg">Product name:</label> <br />
-              <input
-                type="text"
-                className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                {...register("name")}
-              />
-              <p className="text-red-500">{errors.name?.message}</p>
+              <form className="my-6 w-full" onSubmit={handleSubmit(onSubmit)}>
+                <div className="w-full">
+                  <label className="text-lg">Product name:</label> <br />
+                  <input
+                    type="text"
+                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
+                    {...register("name")}
+                  />
+                  <p className="text-red-500">{errors.name?.message}</p>
+                </div>
+                <div className="w-full">
+                  <label className="text-lg">Product Description:</label> <br />
+                  <input
+                    type="text"
+                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
+                    {...register("description")}
+                  />
+                  <p className="text-red-500">{errors.description?.message}</p>
+                </div>
+                <div className="w-full">
+                  <label className="text-lg">Product Price:</label> <br />
+                  <input
+                    type="text"
+                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
+                    {...register("price")}
+                  />
+                  <p className="text-red-500">{errors.price?.message}</p>
+                </div>
+                <div className="mx-auto w-[150px] my-3">
+                  <button className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md">
+                    Add Product
+                  </button>
+                </div>
+              </form>
             </div>
-            <div className="w-full">
-              <label className="text-lg">Product Description:</label> <br />
-              <input
-                type="text"
-                className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                {...register("description")}
-              />
-              <p className="text-red-500">{errors.description?.message}</p>
+          ) : (
+            <div>
+              <p>start there</p>
             </div>
-            <div className="w-full">
-              <label className="text-lg">Product Price:</label> <br />
-              <input
-                type="text"
-                className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                {...register("price")}
-              />
-              <p className="text-red-500">{errors.price?.message}</p>
-            </div>
-            <div className="mx-auto w-[150px] my-3">
-              <button className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md">
-                Add Product
-              </button>
-            </div>
-          </form>
+          )}
+          <div className="mx-auto w-[150px] my-3 border">
+            <button
+              className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md"
+              onClick={uploadProduct}
+            >
+              {stage === 3 ? "Complete" : "Continue"}
+            </button>
+          </div>
         </div>
       </Modal>
       <Toaster />

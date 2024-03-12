@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { Login } from "../components";
 import { register } from "@/actions/auth";
-import { createMeeting } from "@/actions/livestream";
+import { createMeeting, addMeeting } from "@/actions/livestream";
 
 const Main = () => {
   const { user } = useDynamicContext();
@@ -29,10 +29,12 @@ const Main = () => {
 
     const signedInUser = await register(newUser);
     console.log(signedInUser);
-    const meetingId = await createMeeting(signedInUser.token)
-    localStorage.setItem("user", JSON.stringify(signedInUser))
-    console.log(meetingId)
-    router.push(`room/${meetingId}?mode=CONFERENCE`)
+    const meetingId = await createMeeting(signedInUser.token);
+    localStorage.setItem("user", JSON.stringify(signedInUser));
+    console.log(meetingId);
+    await addMeeting({ name: meetingId, userId: signedInUser.id });
+
+    router.push(`room/${meetingId}?mode=CONFERENCE`);
   };
 
   return (

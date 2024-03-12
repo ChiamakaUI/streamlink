@@ -1,12 +1,16 @@
 "use server";
 
 import jwt from "jsonwebtoken";
+import { db } from "@/lib/db";
 
-const authToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI4NTNiYjc3Yi0zZjE0LTRlODItYWU2OS0zNTcwN2JhYmU1NTIiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxMDAyMjkwOSwiZXhwIjoxNzEwNjI3NzA5fQ.-XrO0TTWfw6WApoN7VhDSkk4OoOy_MU2Wi1LTONEOpA";
 const API_KEY = "853bb77b-3f14-4e82-ae69-35707babe552";
 const SECRET =
   "1888c0a1786d42c82772475fb94187a883ab3b34b9c6e6f15e43f0bc9a4ca80e";
+
+type Meeting = {
+  name: string;
+  userId: string;
+};
 
 export const createToken = () => {
   const payload = {
@@ -39,16 +43,11 @@ export const createMeeting = async (token: string) => {
   return roomId;
 };
 
-export const captureHLSThumbnail = async ({ roomId }) => {
-  const res = await fetch(`https://api.videosdk.live/v2/hls/capture`, {
-    method: "POST",
-    headers: {
-      authorization: `${authToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ roomId: roomId }),
+export const addMeeting = async (values: Meeting) => {
+  const res = await db.liveStream.create({
+    data: values,
   });
 
-  const data = await res.json();
-  return data;
+  console.log(res);
+  return res;
 };

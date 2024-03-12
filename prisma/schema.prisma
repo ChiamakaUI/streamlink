@@ -22,8 +22,9 @@ model User {
   image         String?
   walletAddress String
   accounts      Account[]
-  // products      Product[]
-  // bids          Bid[]
+  products      Product[]
+  bids          Bid[]
+  livestreams   LiveStream[]
 }
 
 model Account {
@@ -43,4 +44,47 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Product {
+  id            String  @id @default(cuid())
+  image         String
+  name          String
+  userId        String
+  price         Int
+  streamType    String
+  description   String?
+  liveStreamName String
+  bids          Bid[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+model Bid {
+  id          String  @id @default(cuid())
+  productId   String
+  userId      String
+  price       Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model LiveStream {
+  id        String  @id @default(cuid())
+  name      String 
+  userId    String
+  auction   Auction[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+model Auction {
+  id        String  @id @default(cuid())
+  liveStreamId String
+
+  livestream LiveStream @relation(fields: [liveStreamId], references: [id], onDelete: Cascade)
+
 }
