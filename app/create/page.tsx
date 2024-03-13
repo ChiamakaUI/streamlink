@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { Login } from "../components";
 import { register } from "@/actions/auth";
 import { createMeeting, addMeeting } from "@/actions/livestream";
-import { startAuction } from "@/actions/auction";
+import { Login } from "../components";
 
 const Main = () => {
   const { user } = useDynamicContext();
@@ -35,13 +34,9 @@ const Main = () => {
     console.log(meetingId);
     await addMeeting({ name: meetingId, userId: signedInUser.id });
 
-    router.push(`room/${meetingId}?mode=CONFERENCE`);
+    router.push(`${meetingId}?mode=CONFERENCE`);
   };
 
-  const start = () => {
-    console.log("hello start")
-    startAuction("tyyttyy")
-  }
 
   return (
     <>
@@ -58,9 +53,10 @@ const Main = () => {
             Stream now
           </button>
         </div>
-        <button onClick={start} className="border bg-red-600 mt-8">start auction</button>
       </div>
-      {isLoggedIn && <Login />}
+      {
+        isLoggedIn && <Login/>
+      }
     </>
   );
 };

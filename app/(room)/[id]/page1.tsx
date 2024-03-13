@@ -1,28 +1,23 @@
 "use client";
-import React from "react";
+
 import { useSearchParams } from "next/navigation";
 import { MeetingProvider, MeetingConsumer } from "@videosdk.live/react-sdk";
-import Container from "./Container";
+import { Container } from "@/app/components";
 
 type ModeProps = "CONFERENCE" | "VIEWER" | undefined;
 
-type RoomContainerProps = {
-  meetingId: string;
-};
-
-const RoomContainer = ({ meetingId }: RoomContainerProps) => {
+const Main = ({ params }: { params: { id: string } }) => {
   const searchParams = useSearchParams();
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const mode = searchParams.get("mode") as ModeProps;
 
-  console.log({ meetingId });
   return (
     currentUser &&
     mode && (
       <MeetingProvider
         config={{
-          meetingId,
+          meetingId: `${params.id}`,
           micEnabled: true,
           webcamEnabled: true,
           name: currentUser.name,
@@ -33,13 +28,12 @@ const RoomContainer = ({ meetingId }: RoomContainerProps) => {
       >
         <MeetingConsumer>
           {() => {
-            return <Container mode={mode} meetingId={meetingId}/>;
+            return <Container mode={mode} meetingId={`${params.id}`}/>;
           }}
         </MeetingConsumer>
       </MeetingProvider>
     )
   );
-
 };
 
-export default RoomContainer;
+export default Main;
