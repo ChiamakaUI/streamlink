@@ -7,9 +7,10 @@ import Speaker from "./Speaker";
 
 type ContainerProps = {
   mode: "CONFERENCE" | "VIEWER" | undefined;
+  meetingId: string
 };
 
-const Container = ({ mode }: ContainerProps) => {
+const Container = ({ mode, meetingId }: ContainerProps) => {
 
   const mMeeting = useMeeting({
     onParticipantModeChanged: (data) => {
@@ -35,9 +36,9 @@ const Container = ({ mode }: ContainerProps) => {
     <div className="">
 
       {mode === Constants.modes.CONFERENCE ? (
-        <Speaker />
+        <Speaker meetingId={meetingId}/>
       ) : (
-        <Viewer />
+        <Viewer meetingId={meetingId}/>
       )}
     </div>
   );

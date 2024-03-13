@@ -9,9 +9,11 @@ import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
 import axios from "axios";
 import Modal from "./Modal";
+import { createProduct } from "@/actions/product";
 
 type ProductModalProps = {
   setShowModal: Function;
+  meetingId: string
 };
 
 type FormData = {
@@ -33,7 +35,7 @@ const schema = yup.object({
   price: yup.string().required("Please, provide product price"),
 });
 
-const ProductModal = ({ setShowModal }: ProductModalProps) => {
+const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
   const {
     register,
     handleSubmit,
@@ -45,6 +47,7 @@ const ProductModal = ({ setShowModal }: ProductModalProps) => {
   const [file, setFile] = useState(null);
   const [stage, setStage] = useState(1);
   const [products, setProducts] = useState<Product[]>([]);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -101,6 +104,53 @@ const ProductModal = ({ setShowModal }: ProductModalProps) => {
     }
     setStage(3);
   };
+
+  const newProducts = [
+    {
+      image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+      name: "ffff",
+      price: 500,
+      streamType: "auction",
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id
+    },
+    {
+      image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+      name: "ccccc",
+      price: 700,
+      streamType: "auction",
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id
+    },
+    {
+      image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+      name: "bbbb",
+      price: 300,
+      streamType: "auction",
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id
+    },
+    {
+      image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+      name: "aaaaa",
+      price: 800,
+      streamType: "auction",
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id
+    },
+    {
+      image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+      name: "hhhh",
+      price: 500,
+      streamType: "auction",
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id
+    }
+  ]
+
+  const addProducts = () => {
+    createProduct(newProducts)
+  }
   return (
     <>
       <Modal bgColor={"bg-modal-black"}>
@@ -112,6 +162,7 @@ const ProductModal = ({ setShowModal }: ProductModalProps) => {
             <IoMdClose className="text-white text-base cursor-pointer" />
           </div>
           <p className="text-red-600 text-xl">{stage}</p>
+          <button onClick={addProducts}>Add Products to DB</button>
           {stage === 1 ? (
             <div>
               <p>start there</p>

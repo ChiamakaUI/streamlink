@@ -6,14 +6,14 @@ export const createProduct = async (values) => {
   const res = await db.product.createMany({
     data: values,
   });
-
+// console.log(res)
   return res;
 };
 
-export const getProducts = async (id: string) => {
+export const getProductsByUserId = async (id: string) => {
   const products = await db.product.findMany({
     where: {
-      userId: id
+      userId: id,
     }
   })
   return products
@@ -25,5 +25,6 @@ export const getProductsByStream = async (streamId: string) => {
       liveStreamName: streamId,
     }
   })
+  // console.log(products)
   return products
 };

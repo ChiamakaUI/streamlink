@@ -50,6 +50,5 @@ export const addMeeting = async (values: Meeting) => {
     data: values,
   });
 
-  console.log(res);
   return res;
 };

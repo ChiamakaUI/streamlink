@@ -1,15 +1,33 @@
 "use client"
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMeeting } from "@videosdk.live/react-sdk";
+import { getProductsByStream } from "@/actions/product";
+import { io } from "socket.io-client";
+import ProductCard from "./ProductCard";
 
   import Hls from "hls.js";
 
-const Viewer = () => {
+  type ViewerProps = {
+    meetingId: string
+  }
+
+const Viewer = ({meetingId}: ViewerProps) => {
    // States to store downstream url and current HLS state
+   const [products, setProducts] = useState([]);
    const playerRef = useRef<HTMLVideoElement>(null);
    const { hlsUrls, hlsState } = useMeeting();
 
+   const socket = io("http://localhost:3000");
+
+   socket.on("connect", () => {
+     console.log(socket.id);
+   });
+ 
+   const sendBid = (data) => {
+     socket.emit("bids", data);
+     console.log("Bid sent");
+   };
 
    useEffect(() => {
      if (hlsUrls.downstreamUrl && hlsState === "HLS_PLAYABLE") {
@@ -47,9 +65,22 @@ const Viewer = () => {
      }
    }, [hlsUrls, hlsState]);
  
+   useEffect(() => {
+    const getAuctionProducts = async () => {
+      const products = await getProductsByStream(`${meetingId}`);
+      console.log(products);
+      setProducts(products);
+    };
+
+    getAuctionProducts();
+  }, [meetingId]);
+   
    return (
      <div>
-       <div>
+       <div className="bg-grey-600">
+       {products.map((product) => (
+            <ProductCard key={product.id} product={product} bidFunc={sendBid} />
+          ))}
        </div>
        {hlsState !== "HLS_PLAYABLE" ? (
          <div>

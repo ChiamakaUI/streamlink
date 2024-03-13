@@ -58,7 +58,7 @@ const Main = () => {
             Stream now
           </button>
         </div>
-        <button onClick={start} className="border bg-red-600 mt-8">start stream</button>
+        <button onClick={start} className="border bg-red-600 mt-8">start auction</button>
       </div>
       {isLoggedIn && <Login />}
     </>
