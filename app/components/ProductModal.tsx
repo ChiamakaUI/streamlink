@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { IoCameraOutline } from "react-icons/io5";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler  } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
@@ -13,18 +13,18 @@ import { createProduct } from "@/actions/product";
 
 type ProductModalProps = {
   setShowModal: Function;
-  meetingId: string
+  meetingId: string;
 };
 
 type FormData = {
   name: string;
-  description: string;
+  description?: string | undefined;
   price: string;
 };
 
 type Product = {
   name: string;
-  description: string;
+  description?: string;
   price: string;
   image: string | null;
 };
@@ -49,7 +49,8 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const onSubmit = (data: FormData) => {
+  // const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
     if (!file) {
       toast.error("Please, add an image to continue");

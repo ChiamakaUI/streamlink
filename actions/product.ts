@@ -2,7 +2,16 @@
 
 import { db } from "@/lib/db";
 
-export const createProduct = async (values) => {
+type Product = {
+    image: string;
+    name: string;
+    price: number;
+    streamType: string;
+    liveStreamName: string;
+    userId: string;
+}
+
+export const createProduct = async (values: Product[]) => {
   const res = await db.product.createMany({
     data: values,
   });

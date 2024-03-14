@@ -10,7 +10,7 @@ type UserProps = {
   image?: string;
 };
 
-export const register = async (values) => {
+export const register = async (values: UserProps) => {
   const { name, email, wallet, image } = values;
   const user = await db.user.findUnique({ where: { email } });
   const token = await createToken();

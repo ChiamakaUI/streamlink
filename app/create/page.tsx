@@ -21,9 +21,9 @@ const Main = () => {
     const { email, firstName, lastName, verifiedCredentials } = user;
 
     const newUser = {
-      name: `${firstName} ${lastName}`,
-      email: email,
-      wallet: verifiedCredentials[0].address,
+      name: `${firstName} ${lastName}` as string,
+      email: email as string,
+      wallet: verifiedCredentials[0].address as string,
     };
 
     if (newUser.email === undefined || newUser.wallet === undefined) return;
