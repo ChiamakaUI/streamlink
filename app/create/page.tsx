@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import toast, { Toaster } from "react-hot-toast";
 import { register } from "@/actions/auth";
 import { createMeeting, addMeeting } from "@/actions/livestream";
 import { Login } from "../components";
@@ -9,11 +10,11 @@ import { Login } from "../components";
 const Main = () => {
   const { user } = useDynamicContext();
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const startStream = async () => {
     if (!user) {
-      setIsLoggedIn(true);
+      setShowLoginModal(true);
       return;
     }
 
@@ -28,15 +29,22 @@ const Main = () => {
     if (newUser.email === undefined || newUser.wallet === undefined) return;
 
     const signedInUser = await register(newUser);
-    console.log(signedInUser);
+
     const meetingId = await createMeeting(signedInUser.token);
     localStorage.setItem("user", JSON.stringify(signedInUser));
-    console.log(meetingId);
+    
     await addMeeting({ name: meetingId, userId: signedInUser.id });
 
     router.push(`${meetingId}?mode=CONFERENCE`);
   };
 
+  useEffect(() => {
+    if (user) {
+      setShowLoginModal(false);
+      toast.success("You are signed in, click button below to continue");
+      return;
+    }
+  }, [user]);
 
   return (
     <>
@@ -54,9 +62,8 @@ const Main = () => {
           </button>
         </div>
       </div>
-      {
-        isLoggedIn && <Login/>
-      }
+      {showLoginModal && <Login />}
+      <Toaster />
     </>
   );
 };

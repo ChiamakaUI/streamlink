@@ -15,7 +15,7 @@ module.exports = (server, db) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("a user connected", socket.id);
+    // console.log("a user connected", socket.id);
 
     socket.on("bids", async (args) => {
       const bid = await db.bid.create({

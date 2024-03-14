@@ -26,7 +26,7 @@ type Product = {
   name: string;
   description: string;
   price: string;
-  image: string;
+  image: string | null;
 };
 
 const schema = yup.object({
@@ -56,17 +56,17 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
       return;
     }
     console.log(data);
-    setProducts((prev) => [...prev, { ...data, productImage: file }]);
+    setProducts((prev) => [...prev, { ...data, image: file }]);
     setShowModal(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     console.log(e.target.files);
     // setFile(URL.createObjectURL(e.target.files[0]));
     uploadImage(e.target.files[0]);
   };
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (file: any) => {
     // const preset_key = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_KEY
     // const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
     const preset_key = "yberuuyv";
@@ -95,7 +95,9 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
       console.log(error);
     }
   };
+
   console.log(products);
+  
   const uploadProduct = () => {
     setStage(2);
     if (stage === 2 || products?.length === 0) {
