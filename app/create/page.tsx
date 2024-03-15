@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import toast, { Toaster } from "react-hot-toast";
-import { register } from "@/actions/auth";
 import { createMeeting, addMeeting } from "@/actions/livestream";
 import { Login } from "../components";
 
@@ -11,29 +10,16 @@ const Main = () => {
   const { user } = useDynamicContext();
   const router = useRouter();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const startStream = async () => {
     if (!user) {
       setShowLoginModal(true);
       return;
     }
-
-    const { email, firstName, lastName, verifiedCredentials } = user;
-
-    const newUser = {
-      name: `${firstName} ${lastName}` as string,
-      email: email as string,
-      wallet: verifiedCredentials[0].address as string,
-    };
-
-    if (newUser.email === undefined || newUser.wallet === undefined) return;
-
-    const signedInUser = await register(newUser);
-
-    const meetingId = await createMeeting(signedInUser.token);
-    localStorage.setItem("user", JSON.stringify(signedInUser));
-    
-    await addMeeting({ name: meetingId, userId: signedInUser.id });
+    const meetingId = await createMeeting(currentUser.token);
+      
+    await addMeeting({ name: meetingId, userId: currentUser.id });
 
     router.push(`${meetingId}?mode=CONFERENCE`);
   };
