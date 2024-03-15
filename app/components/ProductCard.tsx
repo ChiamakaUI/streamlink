@@ -1,5 +1,20 @@
 
-const ProductCard = ({ product, bidFunc }) => {
+type Product = {
+  image: string;
+  name: string;
+  price: number;
+  streamType: string;
+  liveStreamName: string;
+  userId: string;
+  id: string;
+}
+
+type ProductCardProps = {
+  product: Product;
+  bidFunc: Function;
+}
+
+const ProductCard = ({ product, bidFunc }: ProductCardProps) => {
 
     const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
     
