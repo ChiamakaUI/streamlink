@@ -29,7 +29,7 @@ export const createToken = () => {
 // API call to create meeting
 
 export const createMeeting = async (token: string) => {
-  console.log(token);
+  // console.log(token);
   const res = await fetch(`https://api.videosdk.live/v2/rooms`, {
     method: "POST",
     headers: {
@@ -40,6 +40,7 @@ export const createMeeting = async (token: string) => {
   });
 
   const { roomId } = await res.json();
+  console.log(roomId)
   return roomId;
 };
 
