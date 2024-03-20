@@ -41,11 +41,11 @@ const Participant = ({ participantId }: ParticipantProps) => {
   }, [micStream, micOn]);
 
   return (
-    <div key={participantId}>
-      <p>
+    <div key={participantId} className="w-full h-full relative">
+      {/* <p>
         Participant: {displayName} | Webcam: {webcamOn ? "ON" : "OFF"} | Mic:{" "}
         {micOn ? "ON" : "OFF"}
-      </p>
+      </p> */}
       <audio ref={micRef} autoPlay muted={isLocal} />
       {webcamOn && (
         <ReactPlayer
@@ -59,11 +59,13 @@ const Participant = ({ participantId }: ParticipantProps) => {
           //
           url={videoStream}
           //
-          height={"200px"}
-          width={"300px"}
+          height={"100%"}
+          width={"100%"}
           onError={(err) => {
             console.log(err, "participant video error");
           }}
+          className="absolute"
+          // style={{ position: "absolute", top: 0, left: 0, right: 0, objectFit: "contain",  }}
         />
       )}
     </div>
@@ -71,3 +73,5 @@ const Participant = ({ participantId }: ParticipantProps) => {
 };
 
 export default Participant;
+
+// http://localhost:3000/109i-w1qp-sz6l?mode=CONFERENCE

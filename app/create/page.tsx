@@ -52,13 +52,13 @@ const Main = () => {
   return (
     <>
       <div className="flex flex-col items-center">
-        <p className="text-3xl my-5">Welcome To StreamLink </p>
+        <p className="text-xl lg:text-3xl my-5">Welcome To StreamLink </p>
         <div className="flex flex-col items-center">
-          <p className="text-xl mb-5">
+          <p className="text-base text-center lg:text-xl mb-5">
             Click Button below to start an instant livestream
           </p>
           <button
-            className="drop-shadow-md border px-3 py-1.5 text-xl"
+            className="drop-shadow-md border px-3 py-1.5 text-sm lg:text-xl rounded-lg"
             onClick={startStream}
           >
             Stream now
