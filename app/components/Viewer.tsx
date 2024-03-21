@@ -5,6 +5,9 @@ import { useMeeting } from "@videosdk.live/react-sdk";
 import { getProductsByStream } from "@/actions/product";
 import { io } from "socket.io-client";
 import ProductCard from "./ProductCard";
+import WaitRoom from "./WaitRoom"
+import Controls from "./Controls";
+import CallMeta from "./CallMeta";
 import Hls from "hls.js";
 
 type ViewerProps = {
@@ -92,25 +95,20 @@ const Viewer = ({ meetingId }: ViewerProps) => {
   }, [meetingId]);
 
   return (
-    <div>
-      <div className="bg-grey-600">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} bidFunc={sendBid} />
-        ))}
-      </div>
+    <>
       {hlsState !== "HLS_PLAYABLE" ? (
-        <div>
-          <p>HLS has not started yet or is stopped</p>
-        </div>
+        <WaitRoom/>
       ) : (
         hlsState === "HLS_PLAYABLE" && (
-          <div>
+          <div className="relative h-screen w-full">
+            <CallMeta />
+            <Controls meetingId={meetingId} type="buyer"/>
             <video
               ref={playerRef}
               id="hlsPlayer"
               autoPlay={true}
               controls
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%", position: "relative" }}
               playsInline
               muted={true}
               onError={(err) => {
@@ -120,8 +118,14 @@ const Viewer = ({ meetingId }: ViewerProps) => {
           </div>
         )
       )}
-    </div>
+    </>
   );
 };
 
 export default Viewer;
+
+      {/* <div className="bg-grey-600">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} bidFunc={sendBid} />
+        ))}
+      </div> */}

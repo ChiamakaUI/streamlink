@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { IoCameraOutline } from "react-icons/io5";
+
 import { useForm, SubmitHandler  } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import toast, { Toaster } from "react-hot-toast";
@@ -157,9 +157,9 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
   return (
     <>
       <Modal bgColor={"bg-modal-black"}>
-        <div className="bg-white w-[35%] h-full mr-auto p-5 text-black">
+        <div className="bg-white w-full absolute bottom-0 p-5 text-black rounded-t-3xl">
           <div
-            className="bg-red-600 rounded-full ml-auto w-[25px] h-[25px] p-1.5 flex flex-col items-center"
+            className="bg-red-600 rounded-full ml-auto w-[25px] h-[25px] p-1.5 flex flex-col items-center cursor-pointer"
             onClick={() => setShowModal(false)}
           >
             <IoMdClose className="text-white text-base cursor-pointer" />
@@ -172,58 +172,7 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
             </div>
           ) : stage === 2 ? (
             <div>
-              <label>
-                <input type="file" onChange={handleChange} className="hidden" />
-                {file ? (
-                  <div className="w-[120px] rounded-lg">
-                    <img
-                      src={file}
-                      alt=""
-                      className="w-full object-contain rounded-lg"
-                    />
-                  </div>
-                ) : (
-                  <div className="border bg-[#DCDCDC] h-[60px] w-[85px] rounded-lg flex flex-col items-center">
-                    <IoCameraOutline className="text-5xl my-auto" />
-                  </div>
-                )}
-              </label>
-
-              <form className="my-6 w-full" onSubmit={handleSubmit(onSubmit)}>
-                <div className="w-full">
-                  <label className="text-lg">Product name:</label> <br />
-                  <input
-                    type="text"
-                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                    {...register("name")}
-                  />
-                  <p className="text-red-500">{errors.name?.message}</p>
-                </div>
-                <div className="w-full">
-                  <label className="text-lg">Product Description:</label> <br />
-                  <input
-                    type="text"
-                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                    {...register("description")}
-                  />
-                  <p className="text-red-500">{errors.description?.message}</p>
-                </div>
-                <div className="w-full">
-                  <label className="text-lg">Product Price:</label> <br />
-                  <input
-                    type="text"
-                    className="border border-[#ccc] w-full p-2 focus:outline-none my-1.5 rounded-md"
-                    {...register("price")}
-                  />
-                  <p className="text-red-500">{errors.price?.message}</p>
-                </div>
-                <div className="mx-auto w-[150px] my-3">
-                  <button className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md">
-                    Add Product
-                  </button>
-                </div>
-              </form>
-            </div>
+              </div>
           ) : (
             <div>
               <p>start there</p>

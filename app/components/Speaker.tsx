@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useMeeting, Constants } from "@videosdk.live/react-sdk";
 import { MdCallEnd } from "react-icons/md";
 import Controls from "./Controls";
-import CallMeta from "./CallMeta"
+import CallMeta from "./CallMeta";
 import Participant from "./Participant";
 import ProductModal from "./ProductModal";
 import { startAuction } from "@/actions/auction";
@@ -15,10 +15,10 @@ type SpeakerProps = {
 
 const Speaker = ({ meetingId }: SpeakerProps) => {
   const { participants, startHls, hlsState, stopHls } = useMeeting();
-  const [showModal, setShowModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
 
   console.log(participants);
-  console.log(participants.size);
+  // console.log(participants.size);
   const speakers = useMemo(() => {
     const speakerParticipants = [...participants.values()].filter(
       (participant) => {
@@ -32,24 +32,21 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
     console.log("hello start");
     startAuction(`${meetingId}`);
   };
+  
   return (
     <>
       <div className="relative h-screen w-full">
-        {/* <p>Current HLS State: {hlsState}</p> */}
-        {/* <div className="border my-4">
-          <button onClick={() => setShowModal(true)}>Add products</button>
-        </div> */}
-        {/* <div className="border my-4 bg-black text-red-600">
-          <button onClick={start}>start auction</button>
-        </div> */}
-        <CallMeta/>
-        <Controls />
+        <CallMeta />
+        <Controls
+          setShowProductModal={setShowProductModal}
+          meetingId={meetingId}
+          type="vendor"
+        />
         {speakers.map((participant) => (
           <Participant participantId={participant.id} key={participant.id} />
         ))}
-
-        <div className="relative bottom-16 w-full bg-modal-black flex flex-col items-center p-3">
-          {hlsState === "HLS_STOPPED" ? (
+        {hlsState === "HLS_STOPPED" ? (
+          <div className="relative bottom-16 w-full bg-modal-black flex flex-col items-center p-3">
             <button
               onClick={() => {
                 startHls({
@@ -68,21 +65,40 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
             >
               Start stream
             </button>
-          ) : (
+          </div>
+        ) : (
+          <div className="relative bottom-20 w-full bg-modal-black flex flex-col items-center p-3">
             <button
               onClick={() => stopHls()}
               className="text-white bg-red-600 mx-auto p-3 rounded-full flex flex-col items-center "
             >
-              <MdCallEnd className="text-3xl text-white"/>
+              <MdCallEnd className="text-3xl text-white" />
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-      {showModal && (
-        <ProductModal setShowModal={setShowModal} meetingId={meetingId} />
+      {showProductModal && (
+        <ProductModal
+          setShowModal={setShowProductModal}
+          meetingId={meetingId}
+        />
       )}
     </>
   );
 };
 
 export default Speaker;
+
+{
+  /* <p>Current HLS State: {hlsState}</p> */
+}
+{
+  /* <div className="border my-4">
+          <button onClick={() => setShowModal(true)}>Add products</button>
+        </div> */
+}
+{
+  /* <div className="border my-4 bg-black text-red-600">
+          <button onClick={start}>start auction</button>
+        </div> */
+}
