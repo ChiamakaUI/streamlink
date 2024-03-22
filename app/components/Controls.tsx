@@ -5,7 +5,6 @@ import { IoIosShareAlt } from "react-icons/io";
 import { IoMdWallet } from "react-icons/io";
 import UserProfileModal from "./UserProfileModal";
 import ShareModal from "./ShareModal";
-import { set } from "react-hook-form";
 
 type ControlProps = {
   setShowProductModal?: Function;
