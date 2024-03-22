@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
-import axios from "axios";
 import Modal from "./Modal";
 import { createProduct } from "@/actions/product";
 import ProductFormModal from "./ProductFormModal";
@@ -45,172 +44,35 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
     resolver: yupResolver(schema),
   });
 
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-  const [file, setFile] = useState(null);
   const [stage, setStage] = useState(1);
-  const [products, setProducts] = useState<Product[]>([
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "ffff",
-      price: 500,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "ccccc",
-      price: 700,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "bbbb",
-      price: 300,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "aaaaa",
-      price: 800,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "hhhh",
-      price: 500,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-  ]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [showFormModal, setShowFormModal] = useState(false);
-  // const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const [streamType, setStreamType] = useState<string>("");
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-  // const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    // console.log(data);
-    // if (!file) {
-    //   toast.error("Please, add an image to continue");
-    //   return;
-    // }
     console.log(data);
-    // setProducts((prev) => [...prev, { ...data, image: file }]);
-    // setShowModal(false);
-    setStage(2);
+    setStreamType(data?.streamType);
+     setStage(2);
   };
 
-  const handleChange = (e: any) => {
-    console.log(e.target.files);
-    // setFile(URL.createObjectURL(e.target.files[0]));
-    uploadImage(e.target.files[0]);
-  };
-
-  const uploadImage = async (file: any) => {
-    // const preset_key = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_KEY
-    // const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-    const preset_key = "yberuuyv";
-    const cloudName = "adaeze";
-
-    const image = file;
-
-    try {
-      if (image && preset_key && cloudName) {
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("upload_preset", preset_key);
-
-        await axios
-          .post(
-            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-            formData
-          )
-          .then((res) => {
-            console.log("Image: ", res.data.url);
-            setFile(res?.data?.secure_url);
-          })
-          .catch((err) => console.log(err));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   console.log(products);
 
-  const uploadProduct = () => {
-    setStage(2);
-    if (stage === 2 || products?.length === 0) {
-      toast.error("Please add products to continue");
-      return;
-    }
-    setStage(3);
+  const addProducts = async() => {
+    const newProducts = products.map((product) => ({
+      ...product,
+      streamType: streamType,
+      liveStreamName: `${meetingId}`,
+      userId: currentUser.id,
+    }));
+    console.log(newProducts);
+    await createProduct(newProducts);
+    toast.success("Products Added")
+    setShowModal(false)
   };
 
-  const newProducts = [
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "ffff",
-      price: 500,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "ccccc",
-      price: 700,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "bbbb",
-      price: 300,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "aaaaa",
-      price: 800,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-    {
-      image:
-        "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-      name: "hhhh",
-      price: 500,
-      streamType: "auction",
-      liveStreamName: `${meetingId}`,
-      userId: currentUser.id,
-    },
-  ];
-
-  const addProducts = () => {
-    createProduct(newProducts);
-  };
-
-  const removeProduct = (productId) => {
+  const removeProduct = (productId: number) => {
     console.log(productId);
     const newProducts = products.filter((_, i) => i !== productId);
 
@@ -262,7 +124,7 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
                 </button>
               </form>
             </div>
-          ) : stage === 2 ? (
+          ) : (
             <div className="flex flex-col items-center p-3">
               {products.length === 0 ? (
                 <p className="text-lg">No product added yet</p>
@@ -274,6 +136,7 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
                       key={i}
                       removeFunc={removeProduct}
                       productId={i}
+                      type="vendor"
                     />
                   ))}
                 </div>
@@ -289,16 +152,12 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
               </button>
               {products.length !== 0 && (
                 <button
-                  // onClick={() => setShowFormModal(true)}
+                  onClick={addProducts}
                   className="text-black bg-[#EDF042] rounded-lg py-2.5 w-full font-semibold mt-3 text-center"
                 >
                   Continue
                 </button>
               )}
-            </div>
-          ) : (
-            <div>
-              <p>start there</p>
             </div>
           )}
         </div>
@@ -315,19 +174,3 @@ const ProductModal = ({ setShowModal, meetingId }: ProductModalProps) => {
 };
 
 export default ProductModal;
-
-{
-  /* <div className="mx-auto w-[150px] my-3 border">
-            <button
-              className="py-1.5 px-5 border bg-[#3B5390] text-white rounded-md"
-              onClick={uploadProduct}
-            >
-              {stage === 3 ? "Complete" : "Continue"}
-            </button>
-          </div> */
-}
-
-{
-  /* <p className="text-red-600 text-xl">{stage}</p>
-          <button onClick={addProducts}>Add Products to DB</button> */
-}

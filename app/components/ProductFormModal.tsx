@@ -13,7 +13,7 @@ import axios from "axios";
 const schema = yup.object({
   name: yup.string().required("Please, provide product name"),
   description: yup.string(),
-  price: yup.string().required("Please, provide product price"),
+  price: yup.number().required("Please, provide product price"),
 });
 
 type ProductFormModalProps = {
