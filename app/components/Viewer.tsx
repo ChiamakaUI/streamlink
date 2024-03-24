@@ -94,17 +94,25 @@ const Viewer = ({ meetingId }: ViewerProps) => {
     getAuctionProducts();
   }, [meetingId]);
 
+  const testProduct = {
+    image: "string",
+    name: "string",
+    price: 180,
+    id: "234"
+  }
   return (
     <>
-      {hlsState !== "HLS_PLAYABLE" ? (
-        <WaitRoom/>
+      {/* {hlsState !== "HLS_PLAYABLE" ? (
+        <WaitRoom />
       ) : (
-        hlsState === "HLS_PLAYABLE" && (
+        hlsState === "HLS_PLAYABLE" && ( */}
           <div className="relative h-screen w-full">
             <CallMeta />
-            <Controls meetingId={meetingId} type="buyer"/>
+            <Controls meetingId={meetingId} type="buyer" />
+            <ProductCard product={testProduct} bidFunc={sendBid} type="buyer"/>
             <video
-              ref={playerRef}
+              // ref={playerRef}
+              src="https://www.youtube.com/watch?v=0yW2Qr5JOmc"
               id="hlsPlayer"
               autoPlay={true}
               controls
@@ -116,8 +124,8 @@ const Viewer = ({ meetingId }: ViewerProps) => {
               }}
             ></video>
           </div>
-        )
-      )}
+        {/* )
+      )} */}
     </>
   );
 };

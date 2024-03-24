@@ -8,6 +8,7 @@ import CallMeta from "./CallMeta";
 import Participant from "./Participant";
 import ProductModal from "./ProductModal";
 import { startAuction } from "@/actions/auction";
+import ProductCard from "./ProductCard";
 
 type SpeakerProps = {
   meetingId: string;
@@ -32,6 +33,13 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
     console.log("hello start");
     startAuction(`${meetingId}`);
   };
+
+  const testProduct = {
+    image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+    name: "string",
+    price: 180,
+    id: "234"
+  }
   
   return (
     <>
@@ -42,10 +50,11 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
           meetingId={meetingId}
           type="vendor"
         />
+        <ProductCard product={testProduct} bidFunc={() => console.log('hyyyy')} type="vendor"/>
         {speakers.map((participant) => (
           <Participant participantId={participant.id} key={participant.id} />
         ))}
-        {hlsState === "HLS_STOPPED" ? (
+        {"HLS_STOPPED" === "HLS_STOPPED" ? (
           <div className="relative bottom-16 w-full bg-modal-black flex flex-col items-center p-3">
             <button
               onClick={() => {
