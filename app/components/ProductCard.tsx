@@ -13,6 +13,7 @@ type Product = {
 type ProductCardProps = {
   product: Product;
   bidFunc: Function;
+  type: string;
 };
 
 const ProductCard = ({ product, bidFunc, type }: ProductCardProps) => {

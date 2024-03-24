@@ -37,3 +37,14 @@ export const getProductsByStream = async (streamId: string) => {
   // console.log(products)
   return products
 };
+
+export const getProductsByAuction = async (streamId: string) => {
+  const products = await db.product.findMany({
+    where: {
+      liveStreamName: streamId,
+      streamType: "auction"
+    }
+  })
+  // console.log(products)
+  return products
+};

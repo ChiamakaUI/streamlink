@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useMeeting } from "@videosdk.live/react-sdk";
-import { getProductsByStream } from "@/actions/product";
+import { getProductsByAuction } from "@/actions/product";
 import { io } from "socket.io-client";
 import ProductCard from "./ProductCard";
 import WaitRoom from "./WaitRoom"
@@ -86,7 +86,7 @@ const Viewer = ({ meetingId }: ViewerProps) => {
 
   useEffect(() => {
     const getAuctionProducts = async () => {
-      const products = await getProductsByStream(`${meetingId}`);
+      const products = await getProductsByAuction(`${meetingId}`);
       console.log(products);
       setProducts(products);
     };

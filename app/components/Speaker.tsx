@@ -7,7 +7,6 @@ import Controls from "./Controls";
 import CallMeta from "./CallMeta";
 import Participant from "./Participant";
 import ProductModal from "./ProductModal";
-import { startAuction } from "@/actions/auction";
 import ProductCard from "./ProductCard";
 
 type SpeakerProps = {
@@ -28,11 +27,6 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
     );
     return speakerParticipants;
   }, [participants]);
-
-  const start = () => {
-    console.log("hello start");
-    startAuction(`${meetingId}`);
-  };
 
   const testProduct = {
     image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",

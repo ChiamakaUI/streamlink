@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import { IoIosShareAlt } from "react-icons/io";
 import { IoMdWallet } from "react-icons/io";
+import { VscDebugStart } from "react-icons/vsc";
 import { BsShop } from "react-icons/bs";
-import { getProductsByStream } from "@/actions/product";
+import { getProductsByAuction, getProductsByStream } from "@/actions/product";
+import { startAuction } from "@/actions/auction";
 import UserProfileModal from "./UserProfileModal";
 import ShareModal from "./ShareModal";
 import ShopModal from "./ShopModal";
@@ -21,6 +23,7 @@ const Controls = (props: ControlProps) => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showShopModal, setShowShopModal] = useState(false);
   const [products, setProducts] = useState([]);
+  const [streamProducts, setStreamProducts] = useState([])
 
   const handleProductModel = () => {
     if (setShowProductModal === undefined) {
@@ -32,17 +35,32 @@ const Controls = (props: ControlProps) => {
 
   useEffect(() => {
     const getAuctionProducts = async () => {
-      const products = await getProductsByStream(`${meetingId}`);
+      const products = await getProductsByAuction(`${meetingId}`);
       console.log(products);
       setProducts(products);
     };
 
     getAuctionProducts();
   }, [meetingId]);
+
+  useEffect(() => {
+    const getStreamProducts = async () => {
+      const products = await getProductsByStream(`${meetingId}`);
+      console.log(products);
+      setStreamProducts(products);
+    };
+
+    getStreamProducts();
+  }, [meetingId]);
+
+  const start = () => {
+    console.log("hello start");
+    startAuction(`${meetingId}`);
+  };
   return (
     <>
       <div className="absolute right-5 bottom-1/4 flex flex-col items-center z-50">
-        {(type === "vendor" && products.length === 0) && (
+        {(type === "vendor" && streamProducts.length === 0) && (
           <div
             className="flex flex-col items-center"
             onClick={handleProductModel}
@@ -72,7 +90,7 @@ const Controls = (props: ControlProps) => {
           Wallet
         </div>
         <div
-          className="flex flex-col items-center"
+          className="flex flex-col items-center mb-2.5"
           onClick={() => setShowShopModal(true)}
         >
           <button className="bg-[#FFFFFF1A] rounded-full p-3">
@@ -80,8 +98,18 @@ const Controls = (props: ControlProps) => {
           </button>
           Shop
         </div>
+        
+        <div
+          className="flex flex-col items-center"
+          onClick={start}
+        >
+          <button className="bg-[#FFFFFF1A] rounded-full p-3">
+            <VscDebugStart className="text-2xl" />
+          </button>
+          Start
+        </div>
       </div>
-      {showShopModal && <ShopModal setShowModal={setShowShopModal} products={products} />}
+      {showShopModal && <ShopModal setShowModal={setShowShopModal} products={streamProducts} />}
       {showShareModal && (
         <ShareModal setShowModal={setShowShareModal} meetingId={meetingId} />
       )}
