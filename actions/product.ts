@@ -48,3 +48,10 @@ export const getProductsByAuction = async (streamId: string) => {
   // console.log(products)
   return products
 };
+
+export const getCurrentProduct = async (id: string) => {
+  const product = await db.user.findUnique({ where: { id } });
+
+  console.log(product)
+  return product
+}

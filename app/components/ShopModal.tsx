@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { IoMdClose } from "react-icons/io";

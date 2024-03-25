@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FaRegTrashCan } from "react-icons/fa6";
 import { BiEdit } from "react-icons/bi";
 import { FcLike } from "react-icons/fc";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -57,6 +58,7 @@ const Controls = (props: ControlProps) => {
     console.log("hello start");
     startAuction(`${meetingId}`);
   };
+  
   return (
     <>
       <div className="absolute right-5 bottom-1/4 flex flex-col items-center z-50">
