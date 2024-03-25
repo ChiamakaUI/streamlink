@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import toast, { Toaster } from "react-hot-toast";
 import { createMeeting, addMeeting } from "@/actions/livestream";
 import { Login } from "../components";
+import { UserContext } from "@/context/UserContext";
 
 const Main = () => {
   const { user } = useDynamicContext();
+  const { user: currentUser } = useContext(UserContext)
   const router = useRouter();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -19,8 +21,8 @@ const Main = () => {
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log(currentUser);
+    // const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log({currentUser});
     const meetingId = await createMeeting(currentUser.token);
     console.log("middle");
     await addMeeting({ name: meetingId, userId: currentUser.id });
@@ -28,7 +30,7 @@ const Main = () => {
     router.push(`${meetingId}?mode=CONFERENCE`);
     console.log("byyye");
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [currentUser]);
 
   const handleCloseModal = useCallback(async () => {
     try {
@@ -40,14 +42,14 @@ const Main = () => {
   }, [startStream]);
 
   useEffect(() => {
-    if (user) {
+    if (currentUser) {
       // toast.success("You are signed in, click button below to continue");
       // startStream();
       // setShowLoginModal(false);
       handleCloseModal();
       return;
     }
-  }, [user, handleCloseModal]);
+  }, [currentUser, handleCloseModal]);
 
   return (
     <>
