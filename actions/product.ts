@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { revalidatePath } from 'next/cache'
 
 type Product = {
     image: string;
@@ -49,9 +50,34 @@ export const getProductsByAuction = async (streamId: string) => {
   return products
 };
 
-export const getCurrentProduct = async (id: string) => {
-  const product = await db.user.findUnique({ where: { id } });
+export const getCurrentProduct = async (streamId: string) => {
+  const product = await db.product.findFirst({ 
+    where: {
+      liveStreamName: streamId, 
+      AND: [
+        {
+          auctionStarted: {
+            not: null
+          }
+        },
+        {
+          auctionEnded: {
+            equals: null
+          }
+        }
+      ]
+    } 
+  });
 
   console.log(product)
   return product
 }
+// export const getCurrentProduct = async (id: string) => {
+//   const products = getProductsByAuction(id)
+
+// }
+
+// import { revalidatePath } from 'next/cache'
+// revalidatePath('/blog/[slug]', 'page')
+// // or with route groups
+// revalidatePath('/(main)/post/[slug]', 'page')

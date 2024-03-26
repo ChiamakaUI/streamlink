@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { getProductsByAuction, getCurrentProduct } from "@/actions/product";
+import { getProductsByAuction } from "@/actions/product";
 import { getAuctionBids } from "@/actions/bids";
 // import { io } from "socket.io-client";
 
