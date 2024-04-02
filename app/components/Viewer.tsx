@@ -1,30 +1,30 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useMeeting } from "@videosdk.live/react-sdk";
-import { getProductsByAuction } from "@/actions/product";
+// import { getProductsByAuction } from "@/actions/product";
 import { io } from "socket.io-client";
 import ProductCard from "./ProductCard";
 import WaitRoom from "./WaitRoom"
 import Controls from "./Controls";
 import CallMeta from "./CallMeta";
 import Hls from "hls.js";
+// import { getCurrentProduct } from "@/actions/product";
 
 type ViewerProps = {
   meetingId: string;
 };
 
-type Product = {
-  id: string;
-  image: string;
-  name: string;
-  userId: string;
-  price: number;
-  streamType: string;
-  description: string | null;
-  liveStreamName: string;
-};
+// type Product = {
+//   id: string;
+//   image: string;
+//   name: string;
+//   userId: string;
+//   price: number;
+//   streamType: string;
+//   description: string | null;
+//   liveStreamName: string;
+// };
 
 type Bid = {
   productId: string;
@@ -34,7 +34,7 @@ type Bid = {
 
 const Viewer = ({ meetingId }: ViewerProps) => {
   // States to store downstream url and current HLS state
-  const [products, setProducts] = useState<Product[]>([]);
+  // const [product, setProduct] = useState<Product>();
   const playerRef = useRef<HTMLVideoElement>(null);
   const { hlsUrls, hlsState } = useMeeting();
 
@@ -43,7 +43,7 @@ const Viewer = ({ meetingId }: ViewerProps) => {
   socket.on("connect", () => {
     console.log(socket.id);
   });
-
+  
   const sendBid = (data: Bid) => {
     socket.emit("bids", data);
     console.log("Bid sent");
@@ -85,35 +85,46 @@ const Viewer = ({ meetingId }: ViewerProps) => {
     }
   }, [hlsUrls, hlsState]);
 
-  useEffect(() => {
-    const getAuctionProducts = async () => {
-      const products = await getProductsByAuction(`${meetingId}`);
-      console.log(products);
-      setProducts(products);
-    };
+  // useEffect(() => {
+  //   const getProduct = async () => {
+  //     const product = await getCurrentProduct(`${meetingId}`);
+  //     console.log(product);
+  //     setProduct(product);
+  //   };
 
-    getAuctionProducts();
-  }, [meetingId]);
+  //   getProduct();
+  // }, [meetingId]);
 
-  const testProduct = {
-    image: "string",
-    name: "string",
-    price: 180,
-    id: "234"
-  }
+  // console.log({product});
+  // const socket = io("http://localhost:4000");
+
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to WebSocket server");
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
+  // socket.on("product", (args) => {
+  //   console.log(args)
+  // })
+
   return (
     <>
-      {/* {hlsState !== "HLS_PLAYABLE" ? (
+      {hlsState !== "HLS_PLAYABLE" ? (
         <WaitRoom />
       ) : (
-        hlsState === "HLS_PLAYABLE" && ( */}
+        hlsState === "HLS_PLAYABLE" && (
           <div className="relative h-screen w-full">
             <CallMeta />
             <Controls meetingId={meetingId} type="buyer" />
-            <ProductCard product={testProduct} bidFunc={sendBid} type="buyer"/>
+            <ProductCard bidFunc={sendBid} type="buyer" meetingId={meetingId}/>
             <video
-              // ref={playerRef}
-              src="https://www.youtube.com/watch?v=0yW2Qr5JOmc"
+              ref={playerRef}
+              // src="https://www.youtube.com/watch?v=0yW2Qr5JOmc"
               id="hlsPlayer"
               autoPlay={true}
               controls
@@ -125,8 +136,8 @@ const Viewer = ({ meetingId }: ViewerProps) => {
               }}
             ></video>
           </div>
-        {/* )
-      )} */}
+        )
+      )}
     </>
   );
 };
@@ -138,3 +149,10 @@ export default Viewer;
           <ProductCard key={product.id} product={product} bidFunc={sendBid} />
         ))}
       </div> */}
+
+        // const testProduct = {
+  //   image: "string",
+  //   name: "string",
+  //   price: 180,
+  //   id: "234"
+  // }

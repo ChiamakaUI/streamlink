@@ -1,14 +1,14 @@
-// @ts-nocheck
 "use client";
-
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useMeeting, Constants } from "@videosdk.live/react-sdk";
 import { MdCallEnd } from "react-icons/md";
+import { io } from "socket.io-client";
 import Controls from "./Controls";
 import CallMeta from "./CallMeta";
 import Participant from "./Participant";
 import ProductModal from "./ProductModal";
 import ProductCard from "./ProductCard";
+// import { getCurrentProduct } from "@/actions/product";
 
 type SpeakerProps = {
   meetingId: string;
@@ -17,7 +17,8 @@ type SpeakerProps = {
 const Speaker = ({ meetingId }: SpeakerProps) => {
   const { participants, startHls, hlsState, stopHls } = useMeeting();
   const [showProductModal, setShowProductModal] = useState(false);
-
+  // const [product, setProduct] = useState([]);
+  
   console.log(participants);
   // console.log(participants.size);
   const speakers = useMemo(() => {
@@ -29,12 +30,31 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
     return speakerParticipants;
   }, [participants]);
 
-  const testProduct = {
-    image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
-    name: "string",
-    price: 180,
-    id: "234"
-  }
+  const socket = io("http://localhost:4000");
+  // useEffect(() => {
+  //   const getProduct = async () => {
+  //     const product = await getCurrentProduct(`${meetingId}`);
+  //     console.log(product);
+  //     setProduct(product);
+  //   };
+
+  //   getProduct();
+  // }, [meetingId]);
+
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to WebSocket server");
+  //   });
+    
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  // console.log({product});
+
+  // socket.on("product", (args) => {
+  //   console.log(args)
+  // })
   
   return (
     <>
@@ -45,11 +65,11 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
           meetingId={meetingId}
           type="vendor"
         />
-        <ProductCard product={testProduct} bidFunc={() => console.log('hyyyy')} type="vendor"/>
+        <ProductCard type="vendor" meetingId={meetingId}/>
         {speakers.map((participant) => (
           <Participant participantId={participant.id} key={participant.id} />
         ))}
-        {"HLS_STOPPED" === "HLS_STOPPED" ? (
+        {hlsState === "HLS_STOPPED" ? (
           <div className="relative bottom-16 w-full bg-modal-black flex flex-col items-center p-3">
             <button
               onClick={() => {
@@ -106,3 +126,10 @@ export default Speaker;
           <button onClick={start}>start auction</button>
         </div> */
 }
+
+  // const testProduct = {
+  //   image: "https://res-console.cloudinary.com/adaeze/thumbnails/v1/image/upload/v1709719036/bml0N3MzeGR0bnlzenhxMnRybW0=/grid_landscape",
+  //   name: "string",
+  //   price: 180,
+  //   id: "234"
+  // }

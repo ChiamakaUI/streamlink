@@ -12,7 +12,7 @@ type IstateContext = {
 
 interface Children {
   children: React.ReactNode;
-}
+} 
 
 const initialState = {
   user: {},

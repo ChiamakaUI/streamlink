@@ -7,6 +7,7 @@ type ProductCounterProps = {
 };
 
 const ProductCounter = ({ price }: ProductCounterProps) => {
+  console.log({price})
   const [count, setCount] = useState<number>(price);
 
   const increaseBid = () => {

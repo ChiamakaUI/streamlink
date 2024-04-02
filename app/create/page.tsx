@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import toast, { Toaster } from "react-hot-toast";
+// import { io } from "socket.io-client";
 import { createMeeting, addMeeting } from "@/actions/livestream";
 import { Login } from "../components";
 import { UserContext } from "@/context/UserContext";
@@ -51,6 +52,37 @@ const Main = () => {
     }
   }, [currentUser, handleCloseModal]);
 
+  // const socket = io("http://localhost:4000");
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to WebSocket server");
+  //   });
+
+    // socket.on("data", (data) => {
+    //   console.log("Received data:", data);
+    // });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
+// useEffect(() => {
+//   const socket = io("http://localhost:4000");
+
+//   socket.on("connect", () => {
+//     console.log("Connected to WebSocket server");
+//   });
+
+//   socket.on("data", (data) => {
+//     console.log("Received data:", data);
+//   });
+
+//   return () => {
+//     socket.disconnect();
+//   };
+// }, []);
+
   return (
     <>
       <div className="flex flex-col items-center">
@@ -65,6 +97,7 @@ const Main = () => {
           >
             Stream now
           </button>
+
         </div>
       </div>
       {showLoginModal && <Login />}

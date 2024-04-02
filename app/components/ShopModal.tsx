@@ -1,17 +1,31 @@
-// @ts-nocheck
 "use client";
 
+import { useState, useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
+import { getProductsByStream } from "@/actions/product";
 import Modal from "./Modal";
 import ProductPreview from "./ProductPreview";
 
 type ShopModalProps = {
   setShowModal: Function;
-  // meetingId: string;
-  products: any;
+  meetingId: string;
 };
 
-const ShopModal = ({ setShowModal, products }: ShopModalProps) => {
+const ShopModal = ({ setShowModal, meetingId }: ShopModalProps) => {
+const [products, setProducts] = useState([]);
+
+
+ useEffect(() => {
+  const getStreamProducts = async () => {
+    const products = await getProductsByStream(`${meetingId}`);
+    console.log(products);
+    setProducts(products);
+  };
+
+  getStreamProducts();
+}, [meetingId]);
+
+console.log({products})
   return (
     <Modal bgColor={"bg-modal-black"}>
       <div className="bg-white w-full absolute bottom-0 p-5 text-black rounded-t-3xl">

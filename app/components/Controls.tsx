@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -8,6 +7,8 @@ import { VscDebugStart } from "react-icons/vsc";
 import { BsShop } from "react-icons/bs";
 import { getProductsByAuction, getProductsByStream } from "@/actions/product";
 import { startAuction } from "@/actions/auction";
+// import { sendDataToClients } from "@/websocket/websocket"
+
 import UserProfileModal from "./UserProfileModal";
 import ShareModal from "./ShareModal";
 import ShopModal from "./ShopModal";
@@ -23,7 +24,7 @@ const Controls = (props: ControlProps) => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showShopModal, setShowShopModal] = useState(false);
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [streamProducts, setStreamProducts] = useState([])
 
   const handleProductModel = () => {
@@ -34,15 +35,15 @@ const Controls = (props: ControlProps) => {
     }
   };
 
-  useEffect(() => {
-    const getAuctionProducts = async () => {
-      const products = await getProductsByAuction(`${meetingId}`);
-      console.log(products);
-      setProducts(products);
-    };
+  // useEffect(() => {
+  //   const getAuctionProducts = async () => {
+  //     const products = await getProductsByAuction(`${meetingId}`);
+  //     console.log(products);
+  //     setProducts(products);
+  //   };
 
-    getAuctionProducts();
-  }, [meetingId]);
+  //   getAuctionProducts();
+  // }, [meetingId]);
 
   useEffect(() => {
     const getStreamProducts = async () => {
@@ -57,6 +58,7 @@ const Controls = (props: ControlProps) => {
   const start = () => {
     console.log("hello start");
     startAuction(`${meetingId}`);
+    // sendDataToClients("hello start")
   };
   
   return (
@@ -111,7 +113,7 @@ const Controls = (props: ControlProps) => {
           Start
         </div>
       </div>
-      {showShopModal && <ShopModal setShowModal={setShowShopModal} products={streamProducts} />}
+      {showShopModal && <ShopModal setShowModal={setShowShopModal} meetingId={meetingId} />}
       {showShareModal && (
         <ShareModal setShowModal={setShowShareModal} meetingId={meetingId} />
       )}
