@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useMeeting } from "@videosdk.live/react-sdk";
 // import { getProductsByAuction } from "@/actions/product";
-import { io } from "socket.io-client";
-import ProductCard from "./ProductCard";
+// import { io } from "socket.io-client";
+// import ProductCard from "./ProductCard";
 import WaitRoom from "./WaitRoom"
 import Controls from "./Controls";
 import CallMeta from "./CallMeta";
@@ -26,28 +26,13 @@ type ViewerProps = {
 //   liveStreamName: string;
 // };
 
-type Bid = {
-  productId: string;
-  userId: string;
-  price: number;
-};
+
 
 const Viewer = ({ meetingId }: ViewerProps) => {
   // States to store downstream url and current HLS state
   // const [product, setProduct] = useState<Product>();
   const playerRef = useRef<HTMLVideoElement>(null);
   const { hlsUrls, hlsState } = useMeeting();
-
-  const socket = io("http://localhost:3000");
-
-  socket.on("connect", () => {
-    console.log(socket.id);
-  });
-  
-  const sendBid = (data: Bid) => {
-    socket.emit("bids", data);
-    console.log("Bid sent");
-  };
 
   useEffect(() => {
     if (hlsUrls.downstreamUrl && hlsState === "HLS_PLAYABLE") {
@@ -85,32 +70,6 @@ const Viewer = ({ meetingId }: ViewerProps) => {
     }
   }, [hlsUrls, hlsState]);
 
-  // useEffect(() => {
-  //   const getProduct = async () => {
-  //     const product = await getCurrentProduct(`${meetingId}`);
-  //     console.log(product);
-  //     setProduct(product);
-  //   };
-
-  //   getProduct();
-  // }, [meetingId]);
-
-  // console.log({product});
-  // const socket = io("http://localhost:4000");
-
-  // useEffect(() => {
-  //   socket.on("connect", () => {
-  //     console.log("Connected to WebSocket server");
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-
-  // socket.on("product", (args) => {
-  //   console.log(args)
-  // })
 
   return (
     <>
@@ -121,7 +80,7 @@ const Viewer = ({ meetingId }: ViewerProps) => {
           <div className="relative h-screen w-full">
             <CallMeta />
             <Controls meetingId={meetingId} type="buyer" />
-            <ProductCard bidFunc={sendBid} type="buyer" meetingId={meetingId}/>
+            {/* <ProductCard bidFunc={sendBid} type="buyer" meetingId={meetingId}/> */}
             <video
               ref={playerRef}
               // src="https://www.youtube.com/watch?v=0yW2Qr5JOmc"
@@ -156,3 +115,30 @@ export default Viewer;
   //   price: 180,
   //   id: "234"
   // }
+
+    // useEffect(() => {
+  //   const getProduct = async () => {
+  //     const product = await getCurrentProduct(`${meetingId}`);
+  //     console.log(product);
+  //     setProduct(product);
+  //   };
+
+  //   getProduct();
+  // }, [meetingId]);
+
+  // console.log({product});
+  // const socket = io("http://localhost:4000");
+
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to WebSocket server");
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
+  // socket.on("product", (args) => {
+  //   console.log(args)
+  // })

@@ -23,30 +23,30 @@ export const getAuctionBids = async (id: string) => {
   const bids = await getBids(id);
 
   console.log({bids})
-  // bids.sort((a, b) => b.price - a.price);
-  // console.log("hhehyy bids");
-  // console.log(bids);
-  // console.log("hhehyy bids1");
+  bids.sort((a, b) => b.price - a.price);
+  console.log("hhehyy bids");
+  console.log(bids);
+  console.log("hhehyy bids1");
   // return bids[0];
-  // const config = {
-  //   headers: {
-  //     Authorization: `Bearer 9be9ed262a2ff1.c363e387ad94444797893cd883974587`,
-  //   },
-  // };
+  const config = {
+    headers: {
+      Authorization: `Bearer 9be9ed262a2ff1.c363e387ad94444797893cd883974587`,
+    },
+  };
 
-  // const nftData = {
-  //   name: bids[0].product.name,
-  //   image: bids[0].product.image,
-  //   receiver: {
-  //     address: bids[0].user.walletAddress,
-  //   },
-  // };
+  const nftData = {
+    name: bids[0].product.name,
+    image: bids[0].product.image,
+    receiver: {
+      address: bids[0].user.walletAddress,
+    },
+  };
 
-  // const mintNft = await axios.post(
-  //   `https://devnet.underdogprotocol.com/v2/projects/1/nfts`,
-  //   nftData,
-  //   config
-  // );
+  const mintNft = await axios.post(
+    `https://devnet.underdogprotocol.com/v2/projects/1/nfts`,
+    nftData,
+    config
+  );
 
-  // console.log(mintNft);
+  console.log(mintNft);
 };

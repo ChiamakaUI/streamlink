@@ -2,7 +2,7 @@
 
 import { getProductsByAuction } from "./product";
 import { getAuctionBids } from "./bids";
-import { db } from "@/lib/db";
+// import { db } from "@/lib/db";
 
 // import { io, sendProductToClients } from "@/websocket/websocket";
 
@@ -12,25 +12,10 @@ export const startAuction = async (streamId: string) => {
   const products = await getProductsByAuction(streamId);
   // console.log({ products })
   for (const product of products) {
-    await db.product.update({
-      where: {
-        id: product.id,
-      },
-      data: {
-        auctionStarted: new Date(),
-      },
-    });
+    console.log(product)
     await new Promise((resolve) => {
       setTimeout(async () => {
         await getAuctionBids(product.id);
-        await db.product.update({
-          where: {
-            id: product.id,
-          },
-          data: {
-            auctionEnded: new Date(),
-          },
-        });
         resolve(undefined);
       }, 3000); // Adjust the delay time as needed
     });
@@ -53,4 +38,21 @@ export const startAuction = async (streamId: string) => {
 // io.on("connection", (socket) => {
 //   console.log(socket.id);
 //   socket.emit("product", product);
+// });
+
+// await db.product.update({
+//   where: {
+//     id: product.id,
+//   },
+//   data: {
+//     auctionStarted: new Date(),
+//   },
+// });
+// await db.product.update({
+//   where: {
+//     id: product.id,
+//   },
+//   data: {
+//     auctionEnded: new Date(),
+//   },
 // });

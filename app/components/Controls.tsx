@@ -35,16 +35,6 @@ const Controls = (props: ControlProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   const getAuctionProducts = async () => {
-  //     const products = await getProductsByAuction(`${meetingId}`);
-  //     console.log(products);
-  //     setProducts(products);
-  //   };
-
-  //   getAuctionProducts();
-  // }, [meetingId]);
-
   useEffect(() => {
     const getStreamProducts = async () => {
       const products = await getProductsByStream(`${meetingId}`);
@@ -113,7 +103,7 @@ const Controls = (props: ControlProps) => {
           Start
         </div>
       </div>
-      {showShopModal && <ShopModal setShowModal={setShowShopModal} meetingId={meetingId} />}
+      {showShopModal && <ShopModal setShowModal={setShowShopModal} meetingId={meetingId} type={type}/>}
       {showShareModal && (
         <ShareModal setShowModal={setShowShareModal} meetingId={meetingId} />
       )}

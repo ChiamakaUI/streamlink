@@ -2,7 +2,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useMeeting, Constants } from "@videosdk.live/react-sdk";
 import { MdCallEnd } from "react-icons/md";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import Controls from "./Controls";
 import CallMeta from "./CallMeta";
 import Participant from "./Participant";
@@ -17,6 +17,7 @@ type SpeakerProps = {
 const Speaker = ({ meetingId }: SpeakerProps) => {
   const { participants, startHls, hlsState, stopHls } = useMeeting();
   const [showProductModal, setShowProductModal] = useState(false);
+  // const [showCurrentProduct, setShowCurrentProduct] = useState(false)
   // const [product, setProduct] = useState([]);
   
   console.log(participants);
@@ -29,32 +30,6 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
     );
     return speakerParticipants;
   }, [participants]);
-
-  const socket = io("http://localhost:4000");
-  // useEffect(() => {
-  //   const getProduct = async () => {
-  //     const product = await getCurrentProduct(`${meetingId}`);
-  //     console.log(product);
-  //     setProduct(product);
-  //   };
-
-  //   getProduct();
-  // }, [meetingId]);
-
-  // useEffect(() => {
-  //   socket.on("connect", () => {
-  //     console.log("Connected to WebSocket server");
-  //   });
-    
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-  // console.log({product});
-
-  // socket.on("product", (args) => {
-  //   console.log(args)
-  // })
   
   return (
     <>
@@ -65,7 +40,11 @@ const Speaker = ({ meetingId }: SpeakerProps) => {
           meetingId={meetingId}
           type="vendor"
         />
-        <ProductCard type="vendor" meetingId={meetingId}/>
+        {/* {
+          showCurrentProduct && (
+            <ProductCard type="vendor" meetingId={meetingId}/>
+          )
+        } */}
         {speakers.map((participant) => (
           <Participant participantId={participant.id} key={participant.id} />
         ))}
@@ -133,3 +112,29 @@ export default Speaker;
   //   price: 180,
   //   id: "234"
   // }
+
+    // const socket = io("http://localhost:4000");
+  // useEffect(() => {
+  //   const getProduct = async () => {
+  //     const product = await getCurrentProduct(`${meetingId}`);
+  //     console.log(product);
+  //     setProduct(product);
+  //   };
+
+  //   getProduct();
+  // }, [meetingId]);
+
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to WebSocket server");
+  //   });
+    
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  // console.log({product});
+
+  // socket.on("product", (args) => {
+  //   console.log(args)
+  // })

@@ -17,7 +17,7 @@ export const createProduct = async (values: Product[]) => {
     data: values,
   });
   console.log(res)
-  revalidatePath("/(room)/[id]", "layout");
+  // revalidatePath("/(room)/[id]", "layout");
   return res;
 };
 
@@ -52,47 +52,23 @@ export const getProductsByAuction = async (streamId: string) => {
   return products;
 };
 
-// const result = await prisma.modelName.findFirst({
-//   where: {
-//     liveStreamName: streamId,
-//     AND: [
-//       {
-//         auctionStarted: {
-//           not: null,
-//         },
-//       },
-//       {
-//         auctionEnded: {
-//           equals: null,
-//         },
-//       },
-//     ],
-//   },
-// });
-
-
 export const getCurrentProduct = async (streamId: string) => {
   console.log("heyyyy from product")
   const product = await db.product.findFirst({
     where: {
-      OR: [
-        {
-          auctionEnded: null
-        },
-        {
-          NOT: {
-            auctionStarted: null
-          }
-        },
-        {
-          liveStreamName: streamId
-        }
-      ]
+      streamType: "auction",
+      liveStreamName: streamId,
+      auctionEnded: null,
+      auctionStarted: {
+        not: null
+      },
     }
   });
 
   console.log(product);
-  revalidatePath("/(room)/[id]", "layout");
+  console.log("byeee from product")
+  // const testProducts = await getProductsByAuction(streamId)
+  // console.log(testProducts)
   return product;
 };
 // export const getCurrentProduct = async (id: string) => {
