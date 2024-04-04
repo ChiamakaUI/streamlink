@@ -16,7 +16,7 @@ type Bid = {
 };
 
 const ProductCounter = ({ price, productId }: ProductCounterProps) => {
-  console.log({ price });
+
   const [count, setCount] = useState<number>(price);
   const [showButton, setShowButton] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");

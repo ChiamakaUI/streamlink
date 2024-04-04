@@ -38,7 +38,7 @@ const SingleProduct = ({ product, type }: SingleProductProps) => {
       {(type === "buyer" && product.streamType === "auction") && (
         <ProductCounter price={product?.price} productId={product.id} />
       )}
-      {product.streamType === "sale" && (
+      {(type === "buyer" && product.streamType === "sale") && (
         <button className="bg-[#EDF042] p-2 rounded-xl text-xs font-semibold box-border w-[100px]">
           Buy
         </button>

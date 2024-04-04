@@ -1,4 +1,4 @@
-import ProductCounter from "./ProductCounter";
+// import ProductCounter from "./ProductCounter";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentProduct } from "@/actions/product";
 
@@ -71,11 +71,11 @@ const ProductCard = ({ bidFunc, type, meetingId }: ProductCardProps) => {
         </div>
       </div>
       {/* <button onClick={() => bidFunc(bid)}>Bid </button> */}
-      {type === "buyer" && (
+      {/* {type === "buyer" && (
         <div className="fixed bottom-0 w-full z-40 bg-modal-black p-3.5">
           <ProductCounter price={data?.price ?? 0} />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
