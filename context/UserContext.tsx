@@ -1,6 +1,6 @@
 
 "use client";
-import { useState, useEffect, createContext, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, createContext } from "react";
 
 type IstateContext = {
   // name: string;

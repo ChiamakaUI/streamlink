@@ -33,23 +33,6 @@ const Container = ({ mode, meetingId }: ContainerProps) => {
     mMeetingRef.current = mMeeting;
   }, [mMeeting]);
 
-//   useEffect(() => {
-//     const socket = io();
-// console.log("heyyy")
-// // "http://localhost:4000"
-//     socket.on("connect", () => {
-//       console.log("Connected to WebSocket server");
-//     });
-
-//     socket.on("data", (data: any) => {
-//       console.log("Received data:", data);
-//       // toast.success(`Received payment from ${JSON.stringify(data.sender)}`);
-//     });
-
-//     return () => {
-//       socket.disconnect();
-//     };
-//   }, []);
   return (
     <div className="">
 
