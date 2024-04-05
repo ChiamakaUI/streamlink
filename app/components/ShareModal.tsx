@@ -10,10 +10,10 @@ import Modal from "./Modal";
 type ShareModalProps = {
   setShowModal: Function;
   meetingId: string;
+  type: string;
 };
 
-const ShareModal = ({ setShowModal, meetingId }: ShareModalProps) => {
-
+const ShareModal = ({ setShowModal, meetingId, type }: ShareModalProps) => {
   const copyText = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -22,11 +22,11 @@ const ShareModal = ({ setShowModal, meetingId }: ShareModalProps) => {
       console.error(error.message);
     }
   };
-  
+
   return (
     <>
       <Modal bgColor={"bg-modal-black"}>
-        <div className="bg-white w-[72%] mx-auto rounded-xl p-5 text-black my-28">
+        <div className="bg-white w-[78%] mx-auto rounded-xl p-5 text-black my-28 lg:w-[28%]">
           <div className="flex flex-row justify-between items-center mb-4">
             <p className="text-xl text-[#484848] font-semibold">Share</p>
             <div
@@ -51,17 +51,35 @@ const ShareModal = ({ setShowModal, meetingId }: ShareModalProps) => {
             </button>
           </div>
           <div className="flex flex-col">
-            <p className="text-[#484848]">Copy Link</p>
-            <div className="bg-[#EAEAEA] flex flex-row items-center rounded-md mt-3 p-2 justify-between">
-              <p className="text-sm truncate">{`${window.location.hostname}/${meetingId}?mode=VIEWER`}</p>
-              <TbCopy
-                className="text-[#8C8C8C] text-3xl font-semibold"
-                onClick={() =>
-                  copyText(
-                    `${window.location.hostname}/${meetingId}?mode=VIEWER`
-                  )
-                }
-              />
+            {type === "vendor" && (
+              <div className="my-2">
+                <p className="capitalize font-semibold text-sm">for Co-host</p>
+                <div className="bg-[#EAEAEA] flex flex-row items-center rounded-md mt-3 p-2 justify-between">
+                  <p className="text-sm truncate">{`${window.location.hostname}/${meetingId}?mode=CONFERENCE`}</p>
+                  <TbCopy
+                    className="text-[#8C8C8C] text-3xl font-semibold"
+                    onClick={() =>
+                      copyText(
+                        `${window.location.hostname}/${meetingId}?mode=VIEWER`
+                      )
+                    }
+                  />
+                </div>
+              </div>
+            )}
+            <div className="mt-2">
+              <p className="capitalize font-semibold text-sm">for Audience</p>
+              <div className="bg-[#EAEAEA] flex flex-row items-center rounded-md mt-3 p-2 justify-between">
+                <p className="text-sm truncate">{`${window.location.hostname}/${meetingId}?mode=VIEWER`}</p>
+                <TbCopy
+                  className="text-[#8C8C8C] text-3xl font-semibold"
+                  onClick={() =>
+                    copyText(
+                      `${window.location.hostname}/${meetingId}?mode=VIEWER`
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

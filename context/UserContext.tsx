@@ -23,15 +23,22 @@ const initialState = {
 export const UserContext = createContext<IstateContext>(initialState);
 
 export const UserProvider: React.FC<Children> = ({ children }) => {
-  const [user, setUser] = useState();
-  console.log(user)
+  // const [user, setUser] = useState();
+  // console.log(user)
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if(user.length > 0) {
-      setUser(user)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user") || "{}");
+  //   console.log(user)
+  //   if(Object.values(user).length !== 0) {
+  //     setUser(user)
+  //   }
+  // }, [])
+
+  const [user, setUser] = useState(() => {
+    // getting stored value
+    const currentUser = JSON.parse(localStorage.getItem("user")  || "{}");
+    return currentUser;
+  });
   
   return (
     <UserContext.Provider
@@ -46,3 +53,4 @@ export const UserProvider: React.FC<Children> = ({ children }) => {
 };
 
 //Dispatch<SetStateAction<any>>
+

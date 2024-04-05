@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -8,6 +7,7 @@ import { VscDebugStart } from "react-icons/vsc";
 import { BsShop } from "react-icons/bs";
 import { getProductsByAuction, getProductsByStream } from "@/actions/product";
 import { startAuction } from "@/actions/auction";
+import { Product } from "./SingleProduct";
 // import { sendDataToClients } from "@/websocket/websocket"
 
 import UserProfileModal from "./UserProfileModal";
@@ -25,8 +25,9 @@ const Controls = (props: ControlProps) => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showShopModal, setShowShopModal] = useState(false);
-  // const [products, setProducts] = useState([]);
-  const [streamProducts, setStreamProducts] = useState([])
+  const [auctionStarted, setAuctionStarted] = useState(false);
+  const [auctionProducts, setAuctionProducts] = useState<Product[]>([]);
+
 
   const handleProductModel = () => {
     if (setShowProductModal === undefined) {
@@ -37,25 +38,25 @@ const Controls = (props: ControlProps) => {
   };
 
   useEffect(() => {
-    const getStreamProducts = async () => {
-      const products = await getProductsByStream(`${meetingId}`);
+    const getAuctionProducts = async () => {
+      const products = await getProductsByAuction(`${meetingId}`);
       console.log(products);
-      setStreamProducts(products);
+      setAuctionProducts(products);
     };
 
-    getStreamProducts();
+    getAuctionProducts();
   }, [meetingId]);
 
   const start = () => {
     console.log("hello start");
     startAuction(`${meetingId}`);
-    // sendDataToClients("hello start")
+    setAuctionStarted(true)
   };
-  
+
   return (
     <>
       <div className="absolute right-5 bottom-1/4 flex flex-col items-center z-50">
-        {(type === "vendor" && streamProducts.length === 0) && (
+        {type === "vendor" && !auctionStarted && (
           <div
             className="flex flex-col items-center"
             onClick={handleProductModel}
@@ -93,20 +94,24 @@ const Controls = (props: ControlProps) => {
           </button>
           Shop
         </div>
-        
-        <div
-          className="flex flex-col items-center"
-          onClick={start}
-        >
-          <button className="bg-[#FFFFFF1A] rounded-full p-3">
-            <VscDebugStart className="text-2xl" />
-          </button>
-          Start
-        </div>
+        {(type === "vendor" && auctionProducts.length !== 0) && (
+          <div className="flex flex-col items-center" onClick={start}>
+            <button className="bg-[#FFFFFF1A] rounded-full p-3">
+              <VscDebugStart className="text-2xl" />
+            </button>
+            Start
+          </div>
+        )}
       </div>
-      {showShopModal && <ShopModal setShowModal={setShowShopModal} meetingId={meetingId} type={type}/>}
+      {showShopModal && (
+        <ShopModal
+          setShowModal={setShowShopModal}
+          meetingId={meetingId}
+          type={type}
+        />
+      )}
       {showShareModal && (
-        <ShareModal setShowModal={setShowShareModal} meetingId={meetingId} />
+        <ShareModal setShowModal={setShowShareModal} meetingId={meetingId} type={type} />
       )}
       {showUserModal && <UserProfileModal setShowModal={setShowUserModal} />}
     </>
